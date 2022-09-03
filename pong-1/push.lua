@@ -110,8 +110,10 @@ function push:setShader(name, shader)
 end
 
 function push:initValues()
+  -- 应该是1
   self._PSCALE = (not love11 and self._highdpi) and getDPI() or 1
   
+  --虚拟窗口和真实窗口的比例
   self._SCALE = {
     x = self._RWIDTH/self._WWIDTH * self._PSCALE,
     y = self._RHEIGHT/self._WHEIGHT * self._PSCALE

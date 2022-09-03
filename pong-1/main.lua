@@ -33,6 +33,8 @@ WINDOW_HEIGHT = 720
 VIRTUAL_WIDTH = 432
 VIRTUAL_HEIGHT = 243
 
+state = 0
+
 --[[
     Runs when the game first starts up, only once; used to initialize the game.
 ]]
@@ -57,7 +59,9 @@ end
 ]]
 function love.keypressed(key)
     -- keys can be accessed by string name
-    if key == 'escape' then
+    if key == 'f' then
+        state = 1
+    elseif key == 'escape' then
         -- function LÖVE gives us to terminate application
         love.event.quit()
     end
@@ -69,11 +73,16 @@ end
 ]]
 function love.draw()
     -- begin rendering at virtual resolution
+    --[[
+        大概的原理是在push.start中利用love.graphics等方法改变了坐标系
+        从而绘制的点并不是实际显示在屏幕上的坐标, 而是经过push变换后的坐标
+        draw结束的时候再调用push.end, 还原坐标系
+    ]]
     push:apply('start')
 
     -- condensed onto one line from last example
     -- note we are now using virtual width and height now for text placement
-    love.graphics.printf('Hello Pong!', 0, VIRTUAL_HEIGHT / 2 - 6, VIRTUAL_WIDTH, 'center')
+    love.graphics.printf(state == 0 and 'Hello Pong!' or 'state == 1', 0, VIRTUAL_HEIGHT / 2 - 6, VIRTUAL_WIDTH, 'center')
 
     -- end rendering at virtual resolution
     push:apply('end')
