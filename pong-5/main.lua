@@ -32,6 +32,8 @@ push = require 'push'
 -- methods
 --
 -- https://github.com/vrld/hump/blob/master/class.lua
+-- 用来实现接近其他语言的类
+-- 需要在其他模块使用Class前require
 Class = require 'class'
 
 -- our Paddle class, which stores position and dimensions for each Paddle
@@ -130,8 +132,8 @@ function love.keypressed(key)
     if key == 'escape' then
         -- function LÖVE gives us to terminate application
         love.event.quit()
-    -- if we press enter during the start state of the game, we'll go into play mode
-    -- during play mode, the ball will move in a random direction
+        -- if we press enter during the start state of the game, we'll go into play mode
+        -- during play mode, the ball will move in a random direction
     elseif key == 'enter' or key == 'return' then
         if gameState == 'start' then
             gameState = 'play'
@@ -154,7 +156,7 @@ function love.draw()
 
     -- clear the screen with a specific color; in this case, a color similar
     -- to some versions of the original Pong
-    love.graphics.clear(40/255, 45/255, 52/255, 255/255)
+    love.graphics.clear(40 / 255, 45 / 255, 52 / 255, 255 / 255)
 
     -- draw different things based on the state of the game
     love.graphics.setFont(smallFont)
