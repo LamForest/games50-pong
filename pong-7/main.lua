@@ -112,9 +112,19 @@ function love.update(dt)
         -- slightly increasing it, then altering the dy based on the position of collision
         if ball:collides(player1) then
             ball.dx = -ball.dx * 1.03
+            --[[
+                把球移出paddler的范围
+                否则会有一种极端情况, 某一帧卡了一下, 下一帧检测到碰撞时, 球已经在paddle中心了
+                此时速度反向, 下一帧又检测到碰撞了, 速度又反向.
+                ball永远不能从paddle中出来
+                +5 是因为paddle的宽度为5
+            ]]
             ball.x = player1.x + 5
 
             -- keep velocity going in the same direction, but randomize it
+            --[[
+                ball继续往上走, 走的角度变了
+            ]]
             if ball.dy < 0 then
                 ball.dy = -math.random(10, 150)
             else
@@ -123,6 +133,9 @@ function love.update(dt)
         end
         if ball:collides(player2) then
             ball.dx = -ball.dx * 1.03
+            --[[
+                -4是因为ball在paddle左边, ball的宽度为4
+            ]]
             ball.x = player2.x - 4
 
             -- keep velocity going in the same direction, but randomize it
@@ -133,6 +146,10 @@ function love.update(dt)
             end
         end
 
+        --[[
+                遇见边界反弹的实现
+                出射角和入射角是因为 dx保持不变
+        ]]
         -- detect upper and lower screen boundary collision and reverse if collided
         if ball.y <= 0 then
             ball.y = 0
@@ -183,8 +200,8 @@ function love.keypressed(key)
     if key == 'escape' then
         -- function LÖVE gives us to terminate application
         love.event.quit()
-    -- if we press enter during the start state of the game, we'll go into play mode
-    -- during play mode, the ball will move in a random direction
+        -- if we press enter during the start state of the game, we'll go into play mode
+        -- during play mode, the ball will move in a random direction
     elseif key == 'enter' or key == 'return' then
         if gameState == 'start' then
             gameState = 'play'
@@ -207,7 +224,7 @@ function love.draw()
 
     -- clear the screen with a specific color; in this case, a color similar
     -- to some versions of the original Pong
-    love.graphics.clear(40/255, 45/255, 52/255, 255/255)
+    love.graphics.clear(40 / 255, 45 / 255, 52 / 255, 255 / 255)
 
     -- draw different things based on the state of the game
     love.graphics.setFont(smallFont)
@@ -221,7 +238,7 @@ function love.draw()
     -- draw score on the left and right center of the screen
     -- need to switch font to draw before actually printing
     love.graphics.setFont(scoreFont)
-    love.graphics.print(tostring(player1Score), VIRTUAL_WIDTH / 2 - 50, 
+    love.graphics.print(tostring(player1Score), VIRTUAL_WIDTH / 2 - 50,
         VIRTUAL_HEIGHT / 3)
     love.graphics.print(tostring(player2Score), VIRTUAL_WIDTH / 2 + 30,
         VIRTUAL_HEIGHT / 3)
@@ -246,6 +263,6 @@ end
 function displayFPS()
     -- simple FPS display across all states
     love.graphics.setFont(smallFont)
-    love.graphics.setColor(0, 255/255, 0, 255/255)
+    love.graphics.setColor(0, 255 / 255, 0, 255 / 255)
     love.graphics.print('FPS: ' .. tostring(love.timer.getFPS()), 10, 10)
 end
