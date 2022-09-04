@@ -36,6 +36,8 @@ VIRTUAL_HEIGHT = 243
 -- speed at which we will move our paddle; multiplied by dt in update
 PADDLE_SPEED = 200
 
+PADDLE_WIDTH = 5
+PADDLE_HEIGHT = 20
 --[[
     Runs when the game first starts up, only once; used to initialize the game.
 ]]
@@ -90,6 +92,9 @@ function love.update(dt)
         -- add positive paddle speed to current Y scaled by deltaTime
         player2Y = player2Y + PADDLE_SPEED * dt
     end
+
+    player1Y = math.max(math.min(player1Y, VIRTUAL_HEIGHT - PADDLE_HEIGHT - 10), 0 + 10)
+    player2Y = math.max(math.min(player2Y, VIRTUAL_HEIGHT - PADDLE_HEIGHT - 10), 0 + 10)
 end
 
 --[[
@@ -114,7 +119,7 @@ function love.draw()
 
     -- clear the screen with a specific color; in this case, a color similar
     -- to some versions of the original Pong
-    love.graphics.clear(40/255, 45/255, 52/255, 255/255)
+    love.graphics.clear(40 / 255, 45 / 255, 52 / 255, 255 / 255)
 
     -- draw welcome text toward the top of the screen
     love.graphics.setFont(smallFont)
@@ -123,16 +128,16 @@ function love.draw()
     -- draw score on the left and right center of the screen
     -- need to switch font to draw before actually printing
     love.graphics.setFont(scoreFont)
-    love.graphics.print(tostring(player1Score), VIRTUAL_WIDTH / 2 - 50, 
+    love.graphics.print(tostring(player1Score), VIRTUAL_WIDTH / 2 - 50,
         VIRTUAL_HEIGHT / 3)
     love.graphics.print(tostring(player2Score), VIRTUAL_WIDTH / 2 + 30,
         VIRTUAL_HEIGHT / 3)
 
     -- render first paddle (left side), now using the players' Y variable
-    love.graphics.rectangle('fill', 10, player1Y, 5, 20)
+    love.graphics.rectangle('fill', 10, player1Y, PADDLE_WIDTH, PADDLE_HEIGHT)
 
     -- render second paddle (right side)
-    love.graphics.rectangle('fill', VIRTUAL_WIDTH - 10, player2Y, 5, 20)
+    love.graphics.rectangle('fill', VIRTUAL_WIDTH - 10, player2Y, PADDLE_WIDTH, PADDLE_HEIGHT)
 
     -- render ball (center)
     love.graphics.rectangle('fill', VIRTUAL_WIDTH / 2 - 2, VIRTUAL_HEIGHT / 2 - 2, 4, 4)
